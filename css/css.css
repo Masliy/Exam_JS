@@ -1,0 +1,140 @@
+@font-face {
+	font-family: "RobotoMedium";
+	src: url("../fonts/RobotoMedium/RobotoMedium.eot");
+	src: url("../fonts/RobotoMedium/RobotoMedium.eot?#iefix")format("embedded-opentype"),
+	url("../fonts/RobotoMedium/RobotoMedium.woff") format("woff"),
+	url("../fonts/RobotoMedium/RobotoMedium.ttf") format("truetype");
+	font-style: normal;
+	font-weight: normal;
+}
+
+html,
+body,
+.main {
+	height: 100%;
+	font-family: Roboto, sans-serif;
+	min-height: 350px;
+}
+
+
+
+
+footer, 
+header {
+	height: 15%;
+	background-color: #000;
+	position: relative;
+}
+footer{
+color: #fff;
+}
+.main_window {
+	background: url(../img/bg.png) no-repeat;
+	background-size: 100% 100%;
+	width: 100%;
+	height: 70%;
+	position: relative;
+}
+.hide {
+	display: none;
+}
+.visible {
+	display: inline-block;
+}
+.button_style {
+	background-color: #8A2BE2;
+	position: absolute;
+	left: 50%;
+	margin-left: -90px;
+	top: 20%;
+	font-size: 30px;
+	font-style: italic;
+	-webkit-box-shadow: 0 0 80px 20px rgba(255,255,255,0.4);
+	box-shadow: 0 0 80px 20px rgba(255,255,255,0.4);
+	transition: box-shadow 1s ease-out 0.5s;
+
+}
+.your,
+.gunmen {
+	position: absolute;
+	top: 15%;
+	left: 50%;
+	margin-left: 20%;
+	font-size: 3vh;
+	color: #808080;
+}
+.gunmen {
+	top: 50%;
+}
+.your_time,
+.gunmen_time {
+	position: absolute;
+	top: -3px;
+	left: 50%;
+	color: #fff;
+	font-size: 4vh;
+
+
+}
+.your_time {
+	margin-left: 200%;
+	top: -3px;
+}
+.gunmen_time {
+	margin-left: 75%;
+}
+
+
+.enemy {
+	height: 60%;
+	background-repeat: no-repeat;
+	background-size:100% 100%;
+	width: 15%;
+	position: absolute;
+	top: 25%;
+	/* transform: scaleX(-1); */
+	/* left: 50%; */
+/* 	margin-left: 30%; */
+}
+
+.notice {
+	font-size: 3vh;
+	background-color: #fff;
+	font-weight: bold;
+	border-radius: 10px;
+	text-align: center;
+	position: absolute;
+	top: -60px;
+	right: -100px;
+	min-width: 60px;
+	padding: 10px;
+}
+.notice:after{
+	content: url(../img/arrow.png);
+	position: absolute;
+	left: 50%;
+	margin-left: -20%;
+	bottom: -31px;
+}
+
+.points,
+.reward {
+	position: absolute;
+	top: 10%;
+	margin-left: 10%;
+	font-size: 5vh;
+}
+.reward {
+	top: 60%;
+	font-size: 4vh;
+}
+.points {
+	color: green;
+}
+.pointsInner {
+	position: absolute;
+	top: 5%;
+	margin-left: 150%;
+	font-size: 5vh;
+	color: green;
+}
