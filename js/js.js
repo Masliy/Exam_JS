@@ -41,7 +41,7 @@ var clearInterval__enemyGoHome;
     return total;
 alert("Вы заработали: " + totalScore() + " очков");
 }*/
-$(window).load(function() {
+$(document).ready(function() {
     /*soundForever("sounds/start.mp3");*/
 
 
@@ -124,7 +124,6 @@ function toggleWinEnemy() { /*меняет изображение радующе
 
 function enemyGoHome() { /*стрелок уходит, пристрелив игрока*/
     fire.classList.remove("notice");
-    console.log("ущел домой");
     console.log("текущий шаг", step);
     fire.innerHTML = "";
     counterImage = counterImage || 0;
@@ -151,7 +150,7 @@ function enemyGoHome() { /*стрелок уходит, пристрелив и�
 function enemyMove() { /*стрелок двигается к центру*/
     enemy.style.left = "50%";
     enemy.classList.remove("hide");
-    if (fire.innerHTML != "FOUL!") {
+    if (fire.classList.contains("hide")) {
 
         if (step > -10) {
             step--;
@@ -171,12 +170,11 @@ function enemyMove() { /*стрелок двигается к центру*/
                 timeToKill();
             }
         }
-    } else {
-        
-
-        setTimeout('clearInterval__enemyGoHome=setInterval(enemyGoHome, 1550)', 2000);
-        console.log("clearInterval__enemyGoHome", clearInterval__enemyGoHome);
-        console.log(step);
+    } else if((!fire.classList.contains("hide")) && isNaN(speed)) {
+        timeToKill = {};
+        stopInterval(clearInterval__enemyMove);
+        setTimeout('clearInterval__enemyGoHome=setInterval(enemyGoHome, 150)', 2000);
+        stopInterval(clearInterval__enemyGoHome);/*за 8 секунд уходит*/
     }
 }
 
@@ -184,6 +182,7 @@ function enemyMove() { /*стрелок двигается к центру*/
 
 
 $("#enemy").one("click", function() { /*вызывает событие один раз*/
+    /*stopInterval(clearInterval__enemyMove);*/
     stopTimer = Date.now();
     speed = (((stopTimer - startTimer) / 1000).toFixed(2));
 
