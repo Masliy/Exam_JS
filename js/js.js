@@ -19,28 +19,25 @@ var step = 25,
     /*начальная позиция цели, margin-left: 25%;*/
     counterImage = 0,
     /*здесь лежит число, соответствующее изображению в массиве leftSideEnemy */
-    necessaryTime = 0.40,
+    necessaryTime = 0.60,
     /*время, за которое нужно успеть выстрелить*/
     condition = 1,
     /*здесь лежит число, соответствующее изображению в массиве frontEnemyWin */
     stopCondition = 0,
     /*переменная для отслеживания количества циклов смены изображения при победе стрелка*/
-    speed = 0; /*здесь лежит время, за которое ты успел выстрелить*/
+    speed = 0,
+    /*здесь лежит время, за которое ты успел выстрелить*/
+    total = 0;
+/*сколько всего набрал очков*/
 
 var startTimer, /*здесь лежит дата начала отсчета с момента появления "FIRE"*/
     stopTimer, /*здесь лежит дата выстрела в чувака*/
-    randomWait; /*здесь лежит случайное время задержки перед выстрелом*/
+    randomWait, /*здесь лежит случайное время задержки перед выстрелом*/
+    clearInterval__enemyMove, /*нужна для остановки интервала вызова функции enemyMove*/
+    clearInterval__enemyGoHome; /*нужна для остановки интервала вызова функции enemyGoHome*/
 
+var howManyMillisecondsHavePassed = 0;
 
-var clearInterval__enemyMove;
-var clearInterval__enemyGoHome;
-
-
-/*function totalScore() {
-    var total = 0;
-    return total;
-alert("Вы заработали: " + totalScore() + " очков");
-}*/
 $(document).ready(function() {
     /*soundForever("sounds/start.mp3");*/
 
@@ -61,7 +58,7 @@ $(document).ready(function() {
     };
 });
 
-function stopInterval(obj) { //для остановки setInterval(enemyMove, 150)
+function stopInterval(obj) { //для остановки setInterval
     clearInterval(obj); //если не делать то постоянно запускает функцию, хоть и не 
 } //видно
 
@@ -69,6 +66,7 @@ function soundClick(adressMusic) { /*для одиночных звуков - в
     main_window.appendChild(musicStart);
     musicStart.src = adressMusic; // Указываем путь к звуку "клика"
     musicStart.autoplay = true; // Автоматически запускаем
+    musicStart.type = "audio/mp3";
     musicStart.loop = false; //Для отмены постоянново воспроизведения 
 }
 
@@ -76,6 +74,7 @@ function soundForever(adressMusic) { /**/
     main_window.appendChild(musicStart);
     musicStart.src = adressMusic; // Указываем путь к звуку "клика"
     musicStart.autoplay = true; // Автоматически запускаем
+    musicStart.type = "audio/mp3";
     musicStart.loop = true;
 }
 
@@ -95,6 +94,11 @@ function wait(arr) { /*генерирует случайное время зад
     return randomWait = arr[rand];
 };
 
+/*function counter() {
+        console.log(howManyMillisecondsHavePassed);
+        return howManyMillisecondsHavePassed++;
+       };
+*/
 function timeToKill() {
     wait([200, 1000, 1500, 2000, 3000, 4000]);
     setTimeout('fire.classList.remove("hide")', randomWait);
@@ -102,6 +106,8 @@ function timeToKill() {
     setTimeout("startTimer = Date.now()", randomWait);
     setTimeout('soundClick("sounds/fire.mp3")', randomWait);
 };
+
+
 
 function shootHimBefore(id, necessaryTime) { /*устанавливает необходимое время, за которое нужно успеть выстрелить*/
     document.getElementById(id).innerHTML = necessaryTime.toFixed(2);
@@ -124,7 +130,6 @@ function toggleWinEnemy() { /*меняет изображение радующе
 
 function enemyGoHome() { /*стрелок уходит, пристрелив игрока*/
     fire.classList.remove("notice");
-    console.log("текущий шаг", step);
     fire.innerHTML = "";
     counterImage = counterImage || 0;
     if (enemy.style.transform != "scaleX(-1)") {
@@ -150,7 +155,7 @@ function enemyGoHome() { /*стрелок уходит, пристрелив и�
 function enemyMove() { /*стрелок двигается к центру*/
     enemy.style.left = "50%";
     enemy.classList.remove("hide");
-    if (fire.classList.contains("hide")) {
+    if (fire.classList.contains("hide")) { //для того, чтобы при клике на стрелке он переставал идти
 
         if (step > -10) {
             step--;
@@ -164,17 +169,21 @@ function enemyMove() { /*стрелок двигается к центру*/
                 counterImage = 0;
             }
             if (step == -10) {
-                counterImage = undefined;
+                counterImage = undefined;/*для остановки счетчика*/
                 enemy.style.backgroundImage = frontEnemy[0];
                 soundForever("sounds/before_shot.mp3");
                 timeToKill();
+               /*if (fire.classList.contains("hide")) {не работает, т.к.при достижении step == -10 и выполнении проверки на тот момент fire.classList.contains("hide") всегда true, преждевременный выстрел происходит уже во время ожидания функции timeToKill. Надо что-то другое думать
+                    timeToKill();
+                } else {
+                    return;
+                }*/
             }
         }
-    } else if((!fire.classList.contains("hide")) && isNaN(speed)) {
-        timeToKill = {};
+    } else if ((!fire.classList.contains("hide")) && isNaN(speed)) {
         stopInterval(clearInterval__enemyMove);
         setTimeout('clearInterval__enemyGoHome=setInterval(enemyGoHome, 150)', 2000);
-        stopInterval(clearInterval__enemyGoHome);/*за 8 секунд уходит*/
+        setTimeout('stopInterval(clearInterval__enemyGoHome)', 8000); /*за 8 секунд уходит с любого места экрана*/
     }
 }
 
@@ -182,7 +191,6 @@ function enemyMove() { /*стрелок двигается к центру*/
 
 
 $("#enemy").one("click", function() { /*вызывает событие один раз*/
-    /*stopInterval(clearInterval__enemyMove);*/
     stopTimer = Date.now();
     speed = (((stopTimer - startTimer) / 1000).toFixed(2));
 
@@ -201,7 +209,8 @@ $("#enemy").one("click", function() { /*вызывает событие один
         setTimeout('soundClick("sounds/win.m4a")', 1200);
         enemy.style.backgroundImage = frontEnemyDead[0];
         setTimeout('enemy.style.backgroundImage = frontEnemyDead[1]', 500);
-        pointsInner.innerHTML = ((necessaryTime - speed) * 10000).toFixed(0);
+        total += +((necessaryTime - speed) * 10000).toFixed(0);//пока не надо, а потом пригодится для нескольких раундов
+        pointsInner.innerHTML = total;
     }
     if (necessaryTime < speed) {
         fire.innerHTML = "YOU LOST!";
