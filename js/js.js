@@ -7,13 +7,12 @@ var pointsInner = document.getElementById("pointsInner");
 var reward = document.getElementById("reward");
 var your_time = document.getElementById("your_time");
 var main_window = document.getElementById("main_window");
-var musicStart = document.createElement('audio');
+var musicStart = document.createElement("audio");
+var result = document.getElementById("result");
+var playAgain = document.getElementById("playAgain");
+var playAgain__yes = document.getElementById("yes");
+var bgIfDied = ["url(img/bgRed.png)"];
 
-var bgIfDied = ['url(img/bgRed.png)'];
-/*var leftSideEnemy = ['url(img/couboy/one.png)', 'url(img/couboy/two.png)', 'url(img/couboy/three.png)'];
-var frontEnemy = ['url(img/couboy/front.png)', 'url(img/couboy/gunmanfire.png)'];
-var frontEnemyDead = ['url(img/couboy/deadBody1.png)', 'url(img/couboy/deadBody2.png)'];
-var frontEnemyWin = ['url(img/couboy/frontWin.png)', 'url(img/couboy/frontWin1.png)'];*/
 var arrayImagesEnemy = {
     leftSideEnemy: [],
     frontEnemy: [],
@@ -46,25 +45,11 @@ var randomWait, /*здесь лежит случайное время задер
     clearInterval__enemyGoHome, /*нужна для остановки интервала вызова функции enemyGoHome*/
     clearInterval__toggleWinEnemy, /*нужна для остановки интервала вызова функции toggleWinEnemy*/
     clearInterval__liveCounter, /*нужна для остановки интервала вызова функции liveCounter*/
-    randomEnemy;
+    randomEnemy;/*здесь лежит результат выполнения функции randomNumber, число. Исходя из него выбирается персонаж*/
 
-
-/*$(document).ready(function() {*/
-/*soundForever("sounds/start.mp3");*/
 
 
 /*конструкторы*/
-function win() {
-    fire.innerHTML = "YOU WON!";
-    soundClick("sounds/shot-win.mp3");
-    setTimeout('soundClick("sounds/win.m4a")', 1200);
-    enemy.style.backgroundImage = arrayImagesEnemy.frontEnemyDead[0];
-    setTimeout('enemy.style.backgroundImage = arrayImagesEnemy.frontEnemyDead[1]', 500);
-    total += +((necessaryTime - speed) * 10000).toFixed(0); //пока не надо, а потом пригодится для нескольких раундов
-    pointsInner.innerHTML = total;
-};
-
-
 function stopInterval(obj) { //для остановки setInterval
     clearInterval(obj); //если не делать то постоянно запускает функцию, хоть и не 
 } //видно
@@ -150,20 +135,23 @@ function randomShooter() { /*определение случайного пер�
 
 
 /*вызовы функций*/
-$("#start").on("click", startGame);
+$(document).ready(function() {
+    soundForever("sounds/start.mp3");
 
-function startGame() {
-    var startGame = document.getElementById("start");
-    startGame.classList.remove("visible");
-    startGame.classList.add("hide");
-    setTimeout(displayAll, 0);
-    clearInterval__enemyMove = setInterval(enemyMove, 150);
-    soundClick("sounds/intro.mp3");
-    setTimeout('stopInterval(clearInterval__enemyMove)', 7000); //7 секунд стрелок движется к центру
-    // при step = 25, т.е. margin-left=25%
-    randomShooter();
-};
+    $("#start").on("click", startGame);
 
+    function startGame() {
+        var startGame = document.getElementById("start");
+        startGame.classList.remove("visible");
+        startGame.classList.add("hide");
+        displayAll();
+        clearInterval__enemyMove = setInterval(enemyMove, 150);
+        soundClick("sounds/intro.mp3");
+        setTimeout('stopInterval(clearInterval__enemyMove)', 7000); //7 секунд стрелок движется к центру
+        // при step = 25, т.е. margin-left=25%
+        randomShooter();
+    };
+});
 
 function displayAll() { /* показать все скрытые элементы*/
     points.classList.remove("hide");
@@ -186,7 +174,6 @@ function liveCounter() { /*для бегущего счетчика*/
     }
 };
 
-
 function timeToKill() { /**/
     if (fire.classList.contains("hide")) {
         /*проверяем есть ли класс hide. Если нет значить выстрелили
@@ -196,9 +183,6 @@ function timeToKill() { /**/
         soundClick("sounds/fire.mp3");
     }
 };
-
-
-
 
 function enemyGoHome() { /*стрелок уходит, пристрелив игрока*/
     fire.classList.remove("notice");
@@ -222,7 +206,6 @@ function enemyGoHome() { /*стрелок уходит, пристрелив и�
         enemy.classList.add("hide");
     }
 }
-
 
 function enemyMove() { /*стрелок двигается к центру*/
     enemy.style.left = "50%";
@@ -274,6 +257,19 @@ function lost() {
     setTimeout('soundClick("sounds/death.mp3")', 1200);
     setTimeout('clearInterval__enemyGoHome=setInterval(enemyGoHome, 150)', 6000);
     setTimeout('stopInterval(clearInterval__enemyGoHome)', 12000); /*перестает вызывать функцию через 12 секунд, как раз доходит до margin-left=25%. Если не использовать переменную clearInterval__enemyGoHome а сразу вставлять вместо нее setInterval(enemyGoHome, 150) то не работает почему-то*/
+    setTimeout('stopInterval(clearInterval__enemyGoHome)', 12000);
+};
+
+function win() {
+    fire.innerHTML = "YOU WON!";
+    soundClick("sounds/shot-win.mp3");
+    setTimeout('soundClick("sounds/win.m4a")', 1200);
+    enemy.style.backgroundImage = arrayImagesEnemy.frontEnemyDead[0];
+    setTimeout('enemy.style.backgroundImage = arrayImagesEnemy.frontEnemyDead[1]', 500);
+    total += +((necessaryTime - speed) * 10000).toFixed(0); //пока не надо, а потом пригодится для нескольких раундов
+    pointsInner.innerHTML = total;
+    result.innerHTML = total + "$" + " ";
+    setTimeout('playAgain.style.opacity = "1", playAgain.style.zIndex = "1", fire.classList.add("hide")', 5000);
 };
 
 
@@ -289,3 +285,12 @@ $("#enemy").one("click", function() { /*вызывает событие один
         /*setTimeout(win, 4000);*/
     }
 });
+
+$('#yes').click(function() {
+    location.reload();
+});
+
+/*$('#no').click(function() {
+    location.reload();
+});
+*/
