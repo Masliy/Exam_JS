@@ -10,14 +10,11 @@
 
 html,
 body,
-.main {
+.main_section {
 	height: 100%;
+	width: 100%;
 	font-family: Roboto, sans-serif;
-	min-height: 350px;
 }
-
-
-
 
 footer, 
 header {
@@ -92,9 +89,6 @@ color: #fff;
 	width: 15%;
 	position: absolute;
 	top: 25%;
-	/* transform: scaleX(-1); */
-	/* left: 50%; */
-/* 	margin-left: 30%; */
 }
 
 .notice {
