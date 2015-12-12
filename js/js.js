@@ -103,19 +103,31 @@ function randomShooter() { /*определение случайного пер�
         frontEnemyWin: ['url(img/couboy/frontWin.png)', 'url(img/couboy/frontWin1.png)']
     };
     var mexican = {
-        leftSideEnemy: ['url(img/mexican/one.png)', 'url(img/mexican/two.png)', 'url(img/mexican/three.png)'],
+        leftSideEnemy: ['url(img/mexican/front.png)', 'url(img/mexican/two.png)', 'url(img/mexican/three.png)'],
         frontEnemy: ['url(img/mexican/front.png)', 'url(img/mexican/gunmanfire.png)'],
-        frontEnemyDead: ['url(img/mexican/deadBody1.png)', 'url(img/mexican/deadBody2.png)'],
+        frontEnemyDead: ['url(img/mexican/deadBody1.png)', 'url(img/mexican/deadBody1.png)'],
         frontEnemyWin: ['url(img/mexican/frontWin.png)', 'url(img/mexican/frontWin1.png)']
     };
     var bald = {
-        leftSideEnemy: ['url(img/bald/one.png)', 'url(img/bald/two.png)', 'url(img/bald/three.png)'],
+        leftSideEnemy: ['url(img/bald/front.png)', 'url(img/bald/two.png)', 'url(img/bald/three.png)'],
         frontEnemy: ['url(img/bald/front.png)', 'url(img/bald/gunmanfire.png)'],
-        frontEnemyDead: ['url(img/bald/deadBody1.png)', 'url(img/bald/deadBody2.png)'],
+        frontEnemyDead: ['url(img/bald/deadBody1.png)', 'url(img/bald/deadBody1.png)'],
         frontEnemyWin: ['url(img/bald/frontWin.png)', 'url(img/bald/frontWin1.png)']
     };
+    var villageGuy = {
+        leftSideEnemy: ['url(img/villageGuy/front.png)', 'url(img/villageGuy/two.png)', 'url(img/villageGuy/three.png)'],
+        frontEnemy: ['url(img/villageGuy/front.png)', 'url(img/villageGuy/gunmanfire.png)'],
+        frontEnemyDead: ['url(img/villageGuy/deadBody1.png)', 'url(img/villageGuy/deadBody1.png)'],
+        frontEnemyWin: ['url(img/villageGuy/frontWin.png)', 'url(img/villageGuy/frontWin1.png)']
+    };
+     var postman = {
+        leftSideEnemy: ['url(img/postman/front.png)', 'url(img/postman/two.png)', 'url(img/postman/three.png)'],
+        frontEnemy: ['url(img/postman/front.png)', 'url(img/postman/gunmanfire.png)'],
+        frontEnemyDead: ['url(img/postman/deadBody1.png)', 'url(img/postman/deadBody2.png)'],
+        frontEnemyWin: ['url(img/postman/frontWin.png)', 'url(img/postman/frontWin1.png)']
+    };
 
-    randomEnemy = randomNumber(1, 3); /*значение выполнения функции присваивается переменной randomEnemy*/
+    randomEnemy = randomNumber(1, 5); /*значение выполнения функции присваивается переменной randomEnemy*/
     if (randomEnemy == 1) {
         for (var key in cowboy) {
             arrayImagesEnemy[key] = cowboy[key];
@@ -131,16 +143,27 @@ function randomShooter() { /*определение случайного пер�
             arrayImagesEnemy[key] = bald[key];
         }
     }
+    if (randomEnemy == 4) {
+        for (var key in villageGuy) {
+            arrayImagesEnemy[key] = villageGuy[key];
+        }
+    }
+    if (randomEnemy == 5) {
+        for (var key in postman) {
+            arrayImagesEnemy[key] = postman[key];
+        }
+    }
 };
 
 
 /*вызовы функций*/
 $(document).ready(function() {
-    soundForever("sounds/start.mp3");
+   soundForever("sounds/start.mp3");
+
 
     $("#start").on("click", startGame);
 
-    function startGame() {
+   function startGame() {
         var startGame = document.getElementById("start");
         startGame.classList.remove("visible");
         startGame.classList.add("hide");
@@ -182,6 +205,11 @@ function timeToKill() { /**/
         enemy.style.backgroundImage = arrayImagesEnemy.frontEnemy[1];
         soundClick("sounds/fire.mp3");
     }
+};
+function displayResult() {
+ pointsInner.innerHTML = total;
+    result.innerHTML = total + "$" + " ";
+    setTimeout('playAgain.style.opacity = "1", playAgain.style.zIndex = "1", fire.classList.add("hide")', 5000);
 };
 
 function enemyGoHome() { /*стрелок уходит, пристрелив игрока*/
@@ -245,6 +273,8 @@ function foul() {
     soundClick("sounds/foul.mp3");
     setTimeout('clearInterval__enemyGoHome=setInterval(enemyGoHome, 150)', 2000);
     setTimeout('stopInterval(clearInterval__enemyGoHome)', 8000); /*за 8 секунд уходит с любого места экрана*/
+    displayResult();
+
 };
 
 function lost() {
@@ -258,6 +288,7 @@ function lost() {
     setTimeout('clearInterval__enemyGoHome=setInterval(enemyGoHome, 150)', 6000);
     setTimeout('stopInterval(clearInterval__enemyGoHome)', 12000); /*перестает вызывать функцию через 12 секунд, как раз доходит до margin-left=25%. Если не использовать переменную clearInterval__enemyGoHome а сразу вставлять вместо нее setInterval(enemyGoHome, 150) то не работает почему-то*/
     setTimeout('stopInterval(clearInterval__enemyGoHome)', 12000);
+    displayResult();
 };
 
 function win() {
@@ -270,6 +301,7 @@ function win() {
     pointsInner.innerHTML = total;
     result.innerHTML = total + "$" + " ";
     setTimeout('playAgain.style.opacity = "1", playAgain.style.zIndex = "1", fire.classList.add("hide")', 5000);
+    displayResult();
 };
 
 
