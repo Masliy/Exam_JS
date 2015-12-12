@@ -209,12 +209,12 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
 	left: 50%;
 	margin-left: -35%;
 	font-size: 4vh;
-	top:10%;
+	top:15%;
 }
 .life {
 	color: #fff;
 	font-size: 4vh;
-	top:45%;
+	top:50%;
 }
 .best,
 .score {
