@@ -40,7 +40,9 @@ footer {
 .visible {
     display: inline-block;
 }
-
+.invisible {
+    display: none;
+}
 .button_style {
     background-color: #8A2BE2;
     position: absolute;
@@ -149,10 +151,9 @@ footer {
     position: absolute;
     left: 50%;
     margin-left: -200px;
-    top: 10%;
+    top: 5%;
     font-size: 30px;
     font-style: italic;
-    background-color: transparent;
     z-index: -1;
 }
 
