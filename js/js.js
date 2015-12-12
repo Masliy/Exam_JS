@@ -1,20 +1,22 @@
-var fire = document.getElementById("fire");
-var enemy = document.getElementById("enemy");
-var counterGunmen = document.getElementById("gunmen");
-var counterYour = document.getElementById("your");
-var points = document.getElementById("points");
-var pointsInner = document.getElementById("pointsInner");
-var reward = document.getElementById("reward");
-var your_time = document.getElementById("your_time");
-var main_window = document.getElementById("main_window");
-var musicStart = document.createElement("audio");
-var result = document.getElementById("result");
-var playAgain = document.getElementById("playAgain");
-var playAgain__yes = document.getElementById("yes");
-var round = document.getElementById("round");
-var lives = document.getElementById("life");
+var fire = document.getElementById("fire"),
+    enemy = document.getElementById("enemy"),
+    counterGunmen = document.getElementById("gunmen"),
+    counterYour = document.getElementById("your"),
+    points = document.getElementById("points"),
+    pointsInner = document.getElementById("pointsInner"),
+    reward = document.getElementById("reward"),
+    your_time = document.getElementById("your_time"),
+    main_window = document.getElementById("main_window"),
+    musicStart = document.createElement("audio"),
+    result = document.getElementById("result"),
+    playAgain = document.getElementById("playAgain"),
+    playAgain__yes = document.getElementById("yes"),
+    round = document.getElementById("round"),
+    lives = document.getElementById("life"),
+    bestScoreDiv = document.getElementById("best"),
+    biggestScore = document.getElementById("biggest_score");
 
-var arrayImagesEnemy = {
+var arrayImagesEnemy = {/*сюда будут передаваться url рендомного персонажа*/
     leftSideEnemy: [],
     frontEnemy: [],
     frontEnemyDead: [],
@@ -29,7 +31,7 @@ var step = 25,
     /*какой раунд по счету*/
     availablLives = 3,
     /*сколько жизней(попыток) осталось*/
-    necessaryTime = 0.50,
+    necessaryTime = 1.00,
     /*время, за которое нужно успеть выстрелить*/
     condition = 1,
     /*здесь лежит число, соответствующее изображению в массиве frontEnemyWin */
@@ -40,10 +42,12 @@ var step = 25,
     ifFoul = false,
     /*если выстрелил раньше времени, тут будет true*/
     valueLiveCounter = 0,
-/*здесь лежит значение счетчика для отображения прошедшего времени нон-стоп*/
-    startGame,/*здесь будет лежать document.getElementById("startGame"). Но если определить сразу то jquetty начитает потом ругаться*/
-    stepsFromStart=0,/*сколько шагов было сделано*/
-    ifClick = false;/*было ли выстрел. Если этого не делать то во втором раунде не выстрелишь. Если просто сделать onclick без проверки, то при нескольких нажатиях стрелок убегает со страшной скоростью за экран */
+    /*здесь лежит значение счетчика для отображения прошедшего времени нон-стоп*/
+    startGame, /*здесь будет лежать document.getElementById("startGame"). Но если определить сразу то jquetty начитает потом ругаться*/
+    stepsFromStart = 0,
+    /*сколько шагов было сделано*/
+    ifClick = false, /*было ли выстрел. Если этого не делать то во втором раунде не выстрелишь. Если просто сделать onclick без проверки, то при нескольких нажатиях стрелок убегает со страшной скоростью за экран */
+    bestScore = 0;/*максимальное количество очков, из разных игр*/
 
 var randomWait, /*здесь лежит случайное время задержки перед выстрелом*/
     clearInterval__enemyMove, /*нужна для остановки интервала вызова функции enemyMove*/
@@ -51,6 +55,7 @@ var randomWait, /*здесь лежит случайное время задер
     clearInterval__toggleWinEnemy, /*нужна для остановки интервала вызова функции toggleWinEnemy*/
     clearInterval__liveCounter, /*нужна для остановки интервала вызова функции liveCounter*/
     randomEnemy; /*здесь лежит результат выполнения функции randomNumber, число. Исходя из него выбирается персонаж*/
+
 
 /*конструкторы*/
 function stopInterval(obj) { //для остановки setInterval
@@ -160,19 +165,18 @@ function randomShooter() { /*определение случайного пер�
 
 /*вызовы функций*/
 $(document).ready(function() {
-   /* soundForever("sounds/start.mp3");*/
+    soundForever("sounds/start.mp3");
     startGame = document.getElementById("start"); /*если определить как все переменные подобного значения то не работает...загадкО*/
     startGame.classList.remove("invisible");
 });
 
 function commonActions() { //то, что выполняется с каждым циклом
     displayAll();
-    lives.innerHTML = "lives: " + availablLives;
-    round.innerHTML = "round: " + counterRound;/*какой бой по счету*/
+    lives.innerHTML = "Lives: " + availablLives;
+    round.innerHTML = "Round: " + counterRound; /*какой бой по счету*/
     clearInterval__enemyMove = setInterval(enemyMove, 150);
     soundClick("sounds/intro.mp3");
-    setTimeout('stopInterval(clearInterval__enemyMove)', 7000); //7 секунд стрелок движется к центру
-    // при step = 25, т.е. margin-left=25%
+    setTimeout('stopInterval(clearInterval__enemyMove)', 7000); /*7 секунд стрелок движется к центру при step = 25, т.е. margin-left=25%*/
     randomShooter();
 };
 
@@ -185,6 +189,7 @@ function startGame() {
 };
 
 function displayAll() { /* показать все скрытые элементы*/
+    bestScoreDiv.classList.remove("hide");
     points.classList.remove("hide");
     pointsInner.classList.remove("hide");
     reward.classList.remove("hide");
@@ -194,10 +199,10 @@ function displayAll() { /* показать все скрытые элемент
 };
 
 function liveCounter() { /*для бегущего счетчика*/
-    if (your_time.innerHTML != necessaryTime && ifFoul != true) { /*если делал сравнение не с .innerHTML а с valueLiveCounter то не работало как надо*/
+    if (ifFoul != true && your_time.innerHTML < necessaryTime) { /*если делал сравнение не с .innerHTML а с valueLiveCounter то не работало как надо*/
         valueLiveCounter += 4;
         your_time.innerHTML = (valueLiveCounter / 1000).toFixed(2);
-    } else if (your_time.innerHTML == necessaryTime) {
+    } else {
         stopInterval(clearInterval__liveCounter);
         lost();
     }
@@ -216,7 +221,11 @@ function timeToKill() { /*инициирует выстрел стрелка*/
 function displayResult() {
     pointsInner.innerHTML = total;
     result.innerHTML = total + "$";
-    setTimeout('playAgain.style.opacity = "1", playAgain.style.zIndex = "1", fire.classList.add("hide")', (stepsFromStart*150)+2000);/* для отображения окна с возможностью выбора сыграть еще сразу после ухода стрелка назад. При фиксированном значении, если выстрелить в него сразу как появится, нужно долго ждать*/
+    if (total > bestScore) {
+        bestScore = total;
+        biggestScore.innerHTML = "$" + " " + bestScore;
+    }
+    setTimeout('playAgain.style.opacity = "1", playAgain.style.zIndex = "1", fire.classList.add("hide")', (stepsFromStart * 150) + 2000); /* для отображения окна с возможностью выбора сыграть еще сразу после ухода стрелка назад. При фиксированном значении, если выстрелить в него сразу как появится, нужно долго ждать*/
 };
 
 function enemyGoHome() { /*стрелок уходит, пристрелив игрока*/
@@ -266,7 +275,7 @@ function enemyMove() { /*стрелок двигается к центру*/
                 soundForever("sounds/before_shot.mp3");
                 wait([200, 1000, 1500, 2000, 3000, 4000]);
                 setTimeout(timeToKill, randomWait); /*устанавливает время задержки перед началом стрельбы*/
-                if (ifFoul == false ) {
+                if (ifFoul == false) {
                     setTimeout('clearInterval__liveCounter = setInterval(liveCounter, 4)', randomWait); /* запускаем таймер с постоянным отображением*/
                 }
             }
@@ -283,9 +292,9 @@ function foul() {
     fire.innerHTML = "FOUL!";
     soundClick("sounds/foul.mp3");
     setTimeout('clearInterval__enemyGoHome=setInterval(enemyGoHome, 150)', 2000);
-    setTimeout('stopInterval(clearInterval__enemyGoHome)', (stepsFromStart*150)+2500);/* останавливает таймер когда стрелок уходит и исчезает*/
+    setTimeout('stopInterval(clearInterval__enemyGoHome)', (stepsFromStart * 150) + 2500); /* останавливает таймер когда стрелок уходит и исчезает*/
     playAgain.classList.remove("hide");
-    setTimeout(anotherRound, (stepsFromStart*150)+3500);
+    setTimeout(anotherRound, (stepsFromStart * 150) + 3500);
 };
 
 function lost() {
@@ -294,23 +303,20 @@ function lost() {
     enemy.style.backgroundImage = arrayImagesEnemy.frontEnemyWin[0];
     main_window.style.backgroundImage = "url(img/bgRed.png)";
     clearInterval__toggleWinEnemy = setInterval('toggleWinEnemy(enemy, arrayImagesEnemy.frontEnemyWin)', 800);
-    setTimeout('stopInterval(clearInterval__toggleWinEnemy)', 5000);/* за 5 секунд успевают 3 раза поменяться радующиеся стрелки*/
+    setTimeout('stopInterval(clearInterval__toggleWinEnemy)', 5000); /* за 5 секунд успевают 3 раза поменяться радующиеся стрелки*/
     soundClick("sounds/shot-miss.mp3");
     setTimeout('soundClick("sounds/death.mp3")', 1200);
     setTimeout('clearInterval__enemyGoHome=setInterval(enemyGoHome, 150)', 6000);
     setTimeout('stopInterval(clearInterval__enemyGoHome)', 12000); /*перестает вызывать функцию через 12 секунд, как раз доходит до margin-left=25%. Если не использовать переменную clearInterval__enemyGoHome а сразу вставлять вместо нее setInterval(enemyGoHome, 150) то не работает почему-то*/
     playAgain.classList.remove("hide");
- 
-    if(availablLives == 0) {
-        stepsFromStart = 60;
-       displayResult(); 
-    }
-    else {
-       setTimeout(anotherRound, 12000); 
-    }
-    
-};
 
+    if (availablLives == 0) {
+        stepsFromStart = 60;
+        displayResult();
+    } else {
+        setTimeout(anotherRound, 12000);
+    }
+};
 
 function win() {
     fire.innerHTML = "YOU WON!";
@@ -326,6 +332,7 @@ function win() {
 
 function anotherRound() {
     step = 25;
+    counterRound++;
     stepsFromStart = 0;
     fire.classList.add("notice");
     fire.classList.add("hide");
@@ -348,7 +355,6 @@ function anotherRound() {
 $("#enemy").on("click", function() { /*вызывает событие один раз*/
     stopInterval(clearInterval__liveCounter);
     ifClick = true;
-    counterRound++;
     if (your_time.innerHTML == 0 && your_time.innerHTML < necessaryTime) {
         foul();
     }
@@ -357,13 +363,12 @@ $("#enemy").on("click", function() { /*вызывает событие один 
     }
 });
 
-
-
 $('#yes').on("click", function() {
-    counterRound = 1;
+    counterRound = 0;
     total = 0;
+    pointsInner.innerHTML = total;
     availablLives = 3;
-    necessaryTime = 0.50;
+    necessaryTime = 1.00;
     enemy.style.backgroundImage = "../img/bg.png";
     anotherRound();
 });

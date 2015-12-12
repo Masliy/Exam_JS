@@ -22,40 +22,38 @@
                 <div id="gunmen_time" class="gunmen_time"></div>
             </div>
             <button id="start" class="invisible visible button_style">Start game</button>
+            <div id="round" class="round"></div>
+            <div id="life" class="life"></div>
         </header>
         <div id="main_window" class="main_window">
-            
             <div id="enemy" class=" hide enemy">
                 <div id="fire" class="notice hide">
                     FIRE!!
                 </div>
             </div>
             <div id="playAgain" class="playAgain">
-                <div class="playAgain__result">You've earned <span id="result"></span><br>  
-                Would you like to earn more?
+                <div class="playAgain__result">You've earned <span id="result"></span>
+                    <br> Would you like to earn more?
                 </div>
                 <button id="yes" class="playAgain__yes">Sure </button>
                 <button id="no" class="playAgain__no">No, thanks </button>
             </div>
-            
         </div>
         <footer>
             <div id="points" class="points hide">
                 $
-                <div id="pointsInner" class="pointsInner hide">
-                </div>
+                <div id="pointsInner" class="pointsInner hide"></div>
             </div>
-            <div id="reward" class="reward hide">
-                REWARD
-            </div>
-            <div id="round" class="round"></div>
-            <div id="life" class="life"></div>
+            <div id="reward" class="reward hide"> REWARD</div>
+            <div id="best" class="best hide">
+                <div id="biggest_score" class="biggest_score">$</div>
+                <div class="score">BESTSCORE</div>
         </footer>
-    </div>
-    <script src="js/js.js"></script>
-    <script>
-    document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')
-    </script>
+        </div>
+        <script src="js/js.js"></script>
+        <script>
+        document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')
+        </script>
 </body>
 
 </html>

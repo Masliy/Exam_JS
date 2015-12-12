@@ -23,6 +23,7 @@ header {
 
 footer {
     color: #fff;
+    position: relative;
 }
 
 .main_window {
@@ -63,26 +64,28 @@ footer {
     top: 15%;
     left: 50%;
     margin-left: 20%;
-    font-size: 3vh;
-    color: #808080;
+    font-size: 4vh;
+    color: #006400;
 }
 
 .gunmen {
     top: 50%;
+    color: #fff;
 }
 
 .your_time,
 .gunmen_time {
     position: absolute;
-    top: -3px;
+    top: 0;
     left: 50%;
     color: #fff;
     font-size: 4vh;
+    color: #fff;
 }
 
 .your_time {
     margin-left: 200%;
-    top: -3px;
+ 	color: #006400;
 }
 
 .gunmen_time {
@@ -123,7 +126,8 @@ footer {
 .reward {
     position: absolute;
     top: 10%;
-    margin-left: 10%;
+    left: 50%;
+	margin-left: -35%;
     font-size: 5vh;
 }
 
@@ -141,7 +145,7 @@ footer {
     top: 5%;
     margin-left: 150%;
     font-size: 5vh;
-    color: green;
+    color: #006400;
 }
 
 .playAgain {
@@ -203,12 +207,27 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
 	position: absolute;
 	color: #006400;
 	left: 50%;
-	margin-left: 15%;
-	font-size: 2.5vh;
-	top:15%;
+	margin-left: -35%;
+	font-size: 4vh;
+	top:10%;
 }
 .life {
 	color: #fff;
-	font-size: 2.5vh;
-	top:40%;
+	font-size: 4vh;
+	top:45%;
+}
+.best,
+.score {
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    margin-left: 20%;
+    font-size: 5vh;
+    color: #006400;
+}
+.score {
+    top: 130%;
+    font-size: 4vh;
+    color: #fff;
+    margin-left: -50%;
 }
