@@ -197,3 +197,18 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
     color: #006400;
     font-size: 40px;
 }
+
+.round,
+.life {
+	position: absolute;
+	color: #006400;
+	left: 50%;
+	margin-left: 15%;
+	font-size: 2.5vh;
+	top:15%;
+}
+.life {
+	color: #fff;
+	font-size: 2.5vh;
+	top:40%;
+}
