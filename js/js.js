@@ -165,7 +165,7 @@ function randomShooter() { /*определение случайного пер�
 
 /*вызовы функций*/
 $(document).ready(function() {
-    soundForever("sounds/start.mp3");
+   /* soundForever("sounds/start.mp3");*/
     startGame = document.getElementById("start"); /*если определить как все переменные подобного значения то не работает...загадкО*/
     startGame.classList.remove("invisible");
 });
@@ -202,20 +202,20 @@ function liveCounter() { /*для бегущего счетчика*/
     if (ifFoul != true && your_time.innerHTML < necessaryTime) { /*если делал сравнение не с .innerHTML а с valueLiveCounter то не работало как надо*/
         valueLiveCounter += 4;
         your_time.innerHTML = (valueLiveCounter / 1000).toFixed(2);
-    } else {
+    } else if(ifFoul != true && your_time.innerHTML >= necessaryTime) {
         stopInterval(clearInterval__liveCounter);
         lost();
     }
 };
 
 function timeToKill() { /*инициирует выстрел стрелка*/
-    if (fire.classList.contains("hide")) {
+    if (ifFoul != true) {
         /*проверяем есть ли класс hide. Если нет значить выстрелили
                         раньше, чем было нужно, и запускать функцию не нужно.*/
         fire.classList.remove("hide");
         enemy.style.backgroundImage = arrayImagesEnemy.frontEnemy[1];
         soundClick("sounds/fire.mp3");
-    }
+    } 
 };
 
 function displayResult() {
@@ -280,7 +280,7 @@ function enemyMove() { /*стрелок двигается к центру*/
                 }
             }
         }
-    } else if (fire.classList.contains("hide") && your_time.innerHTML == 0) { /*если выстрелил раньше*/
+    } else if (ifFoul) { /*если выстрелил раньше*/
         foul();
     }
 }
