@@ -336,7 +336,7 @@ function anotherRound() {
     stepsFromStart = 0;
     fire.classList.add("notice");
     fire.classList.add("hide");
-    enemy.classList.add("hide");
+    enemy.classList.add("hide");/*чтобы убрать артефакт с отображением стрелка с левой стороны на долю секунды*/
     counterImage = 0;
     playAgain.classList.add("hide");
     ifFoul = false;
