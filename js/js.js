@@ -165,7 +165,7 @@ function randomShooter() { /*определение случайного пер�
 
 /*вызовы функций*/
 $(document).ready(function() {
-   /* soundForever("sounds/start.mp3");*/
+    soundForever("sounds/start.mp3");
     startGame = document.getElementById("start"); /*если определить как все переменные подобного значения то не работает...загадкО*/
     startGame.classList.remove("invisible");
 });
